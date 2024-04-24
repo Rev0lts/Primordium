@@ -143,14 +143,14 @@ this::CheckSerial2(playerid)
 CMD:shell(playerid, params[])
 {
     if (PlayerInfo[playerid][pInjured] != 0 || GetPVarInt(playerid, "Freeze") || pTemp[playerid][pTaserTime] || pTemp[playerid][pCuffed] || PhoneInfo[playerid][current_page] == PAGE_NOTIFICATION || PlayerInfo[playerid][pJailed] != 0)
-		return SendErrorMessage(playerid, "You cannot use this feature right now.");
+		return SendErrorMessage(playerid, "Você não pode usar este recurso agora.");
 
     new i = IsPlayerAroundShell(playerid);
-    if (!i)  return SendErrorMessage(playerid, "There are no shells near you.");
+    if (!i)  return SendErrorMessage(playerid, "Não a conchas perto de você.");
     
     i -= 1;
-    if (!Shells[i][sUsed])      return SendErrorMessage(playerid, "There are no shells near you.");
-    if (Shells[i][sTime] > 9)   return SendWarningMessage(playerid, "The liners are too hot. Wait a bit before picking them up!");
+    if (!Shells[i][sUsed])      return SendErrorMessage(playerid, "Não a conchas perto de você.");
+    if (Shells[i][sTime] > 9)   return SendWarningMessage(playerid, "Os revestimentos estão muito quentes. Espere um pouco antes de pega-los!");
 		
     Shells[i][sTime]=0;
     Shells[i][sUsed]=0;
