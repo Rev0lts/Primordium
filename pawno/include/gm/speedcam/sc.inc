@@ -27,8 +27,8 @@ SC_OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Flo
 			GetDynamicObjectPos(objectid, speedcam[scid][sc_x], speedcam[scid][sc_y], speedcam[scid][sc_z]);
             GetDynamicObjectRot(objectid, speedcam[scid][sc_rx], speedcam[scid][sc_ry], speedcam[scid][sc_rz]);
 
-  			SendSyntaxMessage(playerid, "You have edited the speed camera position [ID: %i | %s].", scid, speedcam[scid][sc_name]);
-            SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s changed the position of the speed camera [ID: %i | %s]. ))", GetName(playerid), scid, speedcam[scid][sc_name]);
+  			SendSyntaxMessage(playerid, "Você editou a posição da câmera de velocidade [ID: %i | %s].", scid, speedcam[scid][sc_name]);
+            SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s Mudou a posição da câmera de velocidade. [ID: %i | %s]. ))", GetName(playerid), scid, speedcam[scid][sc_name]);
 		}
 		else if (response == EDIT_RESPONSE_CANCEL)
 		{
@@ -66,7 +66,7 @@ SpeedCam_OnPlayerEnterArea(playerid, areaid)
     
     if (speedcam[sp_camid][sc_speed]+20+random(10) > GetVehicleSpeed(sc_vehid))	return 1; 
 
-	SM2(playerid, "The camera captured you %s, you have exceeded the speed limit.", speedcam[sp_camid][sc_name]);
+	SM2(playerid, "A câmera capturou você %s, você excedeu o limite de velocidade.", speedcam[sp_camid][sc_name]);
 
 	PlayerPlaySound(playerid, 1132, 0.0, 0.0, 0.0);
 
@@ -75,14 +75,14 @@ SpeedCam_OnPlayerEnterArea(playerid, areaid)
 	if (!VehicleInfo[sc_vehid][carRent])
 	{
 		if (VehicleInfo[sc_vehid][carPlate] == '_') 
-			return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s]: %s without numbers - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], GetVehicleSpeed(sc_vehid));
+			return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: Radar [ID: %i | %s]: %s sem números - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], GetVehicleSpeed(sc_vehid));
 		else if (VehicleInfo[sc_vehid][carFakePlate])
-			return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s]: %s with unregistered numbers - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], GetVehicleSpeed(sc_vehid));
+			return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: Radar [ID: %i | %s]: %s com números não registrados - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], GetVehicleSpeed(sc_vehid));
 		else if (VehicleInfo[sc_vehid][carWanted])
-			SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s]: %s [%s], wanted - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
+			SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: Radar [ID: %i | %s]: %s [%s], procurado - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
 		
-		GiveVehicleTicket(0, sc_vehid, SC_DEF_TICKET_SUM, "Exceeding the speed limit.", 1);
-		format(msg, sizeof(msg), "Your vehicle %s [%s] was fined by a speed camera on $%d for exceeding the speed limit by %i km/h.", VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], SC_DEF_TICKET_SUM, GetVehicleSpeed(sc_vehid)-speedcam[sp_camid][sc_speed]);
+		GiveVehicleTicket(0, sc_vehid, SC_DEF_TICKET_SUM, "Ultrapassando o limite de velocidade.", 1);
+		format(msg, sizeof(msg), "Seu veículo %s [%s] foi multado por uma câmera de velocidade em $%d por exceder o limite de velocidade em %i km/h.", VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], SC_DEF_TICKET_SUM, GetVehicleSpeed(sc_vehid)-speedcam[sp_camid][sc_speed]);
 		new find = 0;
 		foreach(new i : Player)
 		{
@@ -100,12 +100,12 @@ SpeedCam_OnPlayerEnterArea(playerid, areaid)
 		}
 		else SendSMStoPlayer(playerid, "1199", "Sheriff's Departament", msg);
 		
-		return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s]: %s [%s] - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
+		return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: Radar [ID: %i | %s]: %s [%s] - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
 	}
 	else 
 	{
-		GivePlayerTicket(0, VehicleInfo[sc_vehid][carRent], SC_DEF_TICKET_SUM, "Exceeding the speed limit.", 1);
-		format(msg, sizeof(msg), "Your rented car %s [%s] was fined by a photo-video camera on $%d for exceeding the speed limit by %i km/h.", VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], SC_DEF_TICKET_SUM, GetVehicleSpeed(sc_vehid)-speedcam[sp_camid][sc_speed]);
+		GivePlayerTicket(0, VehicleInfo[sc_vehid][carRent], SC_DEF_TICKET_SUM, "Ultrapassando o limite de velocidade.", 1);
+		format(msg, sizeof(msg), "Seu carro alugado %s [%s] foi multado por uma câmera foto-vídeo em $%d por exceder o limite de velocidade em %i km/h.", VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], SC_DEF_TICKET_SUM, GetVehicleSpeed(sc_vehid)-speedcam[sp_camid][sc_speed]);
 		new find = 0;
 		foreach(new i : Player)
 		{
@@ -123,7 +123,7 @@ SpeedCam_OnPlayerEnterArea(playerid, areaid)
 		}
 		else SendSMStoPlayer(playerid, "1199", "Sheriff's Departament", msg);
 
-		return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s]: %s [%s] - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
+		return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: Radar [ID: %i | %s]: %s [%s] - %i km/h. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate], GetVehicleSpeed(sc_vehid));
 		//return SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "** HQ: SpeedCam [ID: %i | %s] çàôèêñèðîâàëà àðåíäîâàííûé àâòîìîáèëü ìàðêè %s [%s]. **", sp_camid, speedcam[sp_camid][sc_name], VehicleNames[GetVehicleModel(sc_vehid)-400], VehicleInfo[sc_vehid][carPlate]);
 	}
     //return 1;
