@@ -237,7 +237,7 @@ CMD:radiomembers(playerid, params[])
 	    format(dialog_body, sizeof(dialog_body), "%s%s\t%i\n", GetNameEx(i), i);
 	}
 	
-	Dialog_Show(playerid, None, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF}List of players in the channel", dialog_body, "Close", "");
+	Dialog_Show(playerid, None, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF}Lista de jogadores no canal", dialog_body, "Close", "");
 	return 1;
 }
 
