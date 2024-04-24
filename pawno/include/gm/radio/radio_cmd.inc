@@ -282,7 +282,7 @@ CMD:r(playerid, params[])
 				if (sscanf(arg, "u", userid)) return SendErrorMessage(playerid, "/r 10-27 [ID/Part Do Nome]");
 				if (!IsPlayerLogged(userid))	 return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: Nenhum resultado encontrado..");
 
-				SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: %s, sex: %s, age: %i, unpaid fines: %s, search: %s.", GetNameEx(userid), (PlayerInfo[userid][pSex]==1)?("male"):("female"), GetAge(userid), (CountPlayerTickets(userid))?("{FF6347}%i{9189EF}"):("No"), (IsPlayerWanted(userid))?("Yes"):("No"));
+				SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: %s, sexo: %s, idade: %i, multas não pagas: %s, procurar: %s.", GetNameEx(userid), (PlayerInfo[userid][pSex]==1)?("male"):("female"), GetAge(userid), (CountPlayerTickets(userid))?("{FF6347}%i{9189EF}"):("No"), (IsPlayerWanted(userid))?("Yes"):("No"));
 				SendLocalMessage(5.0, playerid, COLOR_FADE1,COLOR_FADE2,COLOR_FADE3,COLOR_FADE4,COLOR_FADE5, "(Radio) %s spune: Dispatcher, 10-27 %s.", GetNameWithMask(playerid), GetNameEx(userid));
 				return 1;
 			} else if (CompareStrings(tag, "10-28")) {
@@ -292,7 +292,7 @@ CMD:r(playerid, params[])
 				
 				PlayCrimeReportForPlayer(playerid, playerid, 13);
 				
-				SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: %s [%s], owner: %s, unpaid fines: %s, search: %s.", VehicleNames[GetVehicleModel(vehicle)-400], VehicleInfo[vehicle][carPlate], VehicleInfo[vehicle][carOwner], (CountVehicleTickets(vehicle))?("%i"):("No"), (VehicleInfo[vehicle][carWanted])?("Yes"):("No"));
+				SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: %s [%s], proprietário: %s, multas não pagas: %s, procurar: %s.", VehicleNames[GetVehicleModel(vehicle)-400], VehicleInfo[vehicle][carPlate], VehicleInfo[vehicle][carOwner], (CountVehicleTickets(vehicle))?("%i"):("No"), (VehicleInfo[vehicle][carWanted])?("Yes"):("No"));
 				SendLocalMessage(5.0, playerid, COLOR_FADE1,COLOR_FADE2,COLOR_FADE3,COLOR_FADE4,COLOR_FADE5, "(Radio) %s spune: Dispatcher, 10-28 %s.", GetNameWithMask(playerid), VehicleInfo[vehicle][carPlate]);
 				return 1;
 			}

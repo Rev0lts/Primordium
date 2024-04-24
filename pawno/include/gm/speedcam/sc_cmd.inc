@@ -95,7 +95,7 @@ CMD:speedcam(playerid, params[])
             new sp_limit;
 
             if (sscanf(fouroption, "d", sp_limit))           return SendHelpMessage(playerid, "/sc edit limit [limite velocidade]");
-            if (sp_limit <= 0 || sp_limit > SC_MAX_SPEED)    return SendErrorMessage(playerid, "Speed ??limit from 1 to %d.", SC_MAX_SPEED);
+            if (sp_limit <= 0 || sp_limit > SC_MAX_SPEED)    return SendErrorMessage(playerid, "Speed ??limit de 1 a %d.", SC_MAX_SPEED);
 
             speedcam[sp_near][sc_speed] = sp_limit;
             SQL_SetInteger("speedcams", "speed", speedcam[sp_near][sc_speed], speedcam[sp_near][sc_id]);
