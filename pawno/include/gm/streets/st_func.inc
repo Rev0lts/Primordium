@@ -91,7 +91,7 @@ this::Create_Street(playerid, Float:x, Float:y, Float:z, Float:rx, Float:ry, Flo
 {	
 	new areas[5], street_area[2], j = GetNumberDynamicAreasForPoint(x,y,z);
 	GetDynamicAreasForPoint(x, y, z, areas, sizeof(areas));
-	if (!GetStreet(areas, j, street_area)) return SendErrorMessage(playerid, "There is no street in this zone!");
+	if (!GetStreet(areas, j, street_area)) return SendErrorMessage(playerid, "Não há rua nesta zona!");
 	
 	pTemp[playerid][editPos][0] = x;
 	pTemp[playerid][editPos][1] = y;
@@ -121,10 +121,10 @@ Dialog:Select_Street(playerid, response, listitem, inputtext[])
 
 	new areas[10], street_area[2], j = GetNumberDynamicAreasForPoint(x,y,z);
 	GetDynamicAreasForPoint(x, y, z, areas, sizeof(areas));
-	if (!GetStreet(areas, j, street_area)) return SendErrorMessage(playerid, "There is no street in this zone!");
+	if (!GetStreet(areas, j, street_area)) return SendErrorMessage(playerid, "Não há rua nesta zona!");
 
 	new id = street_free_slot();
-	if (id == -1) return SendErrorMessage(playerid, "The limit of street signs has been exceeded!");
+	if (id == -1) return SendErrorMessage(playerid, "O limite de placas de rua foi excedido!");
 
 	new direction[12];
 	returnAngel(playerid, x, y, direction, sizeof(direction));
@@ -143,7 +143,7 @@ Dialog:Select_Street(playerid, response, listitem, inputtext[])
 	);
 	mysql_tquery(dbHandle, query, "OnStreetInsert", "d", id);
 
-	SendHelpMessage(playerid, "You have successfully created a sign, use /stname %i and /stdir %i to edit labels.", id, id);
+	SendHelpMessage(playerid, "Você criou com sucesso uma placa, use /stname %i e /stdir %i para editar os rótulos", id, id);
 	return 1;
 }
 
@@ -203,7 +203,7 @@ DeleteStreet(playerid, id)
 	street_data[id][street_direction] = EOS;
 
 
-	SendSyntaxMessage(playerid, "You have successfully removed the street sign [ID:%i]", id);
+	SendSyntaxMessage(playerid, "Você removeu com sucesso a placa de rua [ID:%i]", id);
 	return 1;
 }
 

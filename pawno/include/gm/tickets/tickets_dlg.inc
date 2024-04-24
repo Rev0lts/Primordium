@@ -15,7 +15,7 @@ Dialog:VehicleFines(playerid, response, listitem, inputtext[])
 		vehicle = GetPlayerVehicleID(playerid);
 
 		if (VehicleInfo[vehicle][carOwnerID] != PlayerInfo[playerid][pID])
-			return SendErrorMessage(playerid, "You are not the owner of this vehicle.");
+			return SendErrorMessage(playerid, "Você não é o proprietário deste veículo.");
 	}
     
 	new query[255];
@@ -55,7 +55,7 @@ Dialog:VehicleFinesTake(playerid, response, listitem, inputtext[])
     new vehicle = GetPlayerVehicleID(playerid);
 
 	if (vehicle == 0)													return SendNotInVehicle(playerid);
-	if (VehicleInfo[vehicle][carOwnerID] != PlayerInfo[playerid][pID])	return SendErrorMessage(playerid, "You are not the owner of this vehicle.");
+	if (VehicleInfo[vehicle][carOwnerID] != PlayerInfo[playerid][pID])	return SendErrorMessage(playerid, "Você não é o proprietário deste veículo.");
 
 	new query[128];
 	mysql_format(dbHandle, query, sizeof(query), "UPDATE `tickets` SET `userid`=%i,`vehicle`=0 WHERE `id`=%i", PlayerInfo[playerid][pID], Ticket[playerid][tID]);
@@ -67,8 +67,8 @@ Dialog:VehicleFinesTake(playerid, response, listitem, inputtext[])
 
 this::VehicleFineTook(playerid)
 {
-	SM1(playerid, "You have taken the fine from your vehicle.");
-	cmd::server_ame(playerid, "took a fine from his vehicle.");
+	SM1(playerid, "Você recebeu a multa do seu veículo.");
+	cmd::server_ame(playerid, "pegou uma multa do seu veículo.");
 	return 1;
 }
 
@@ -121,12 +121,12 @@ Dialog:PlayerFinesPay(playerid, response, listitem, inputtext[])
 		else return cmd::tickets(playerid, "");
 	}
 	
-    if (!Bank_Nearest(playerid))	return SendErrorMessage(playerid, "To pay the fine, you must be at the bank.");
+    if (!Bank_Nearest(playerid))	return SendErrorMessage(playerid, "Para pagar a multa, você deve estar no banco.");
 
-	if (GetCash(playerid) < Tickets[playerid][0][tAmount])	return SendErrorMessage(playerid, "You do not have enough funds to pay the fine, $%i.", Ticket[playerid][tAmount]);
+	if (GetCash(playerid) < Tickets[playerid][0][tAmount])	return SendErrorMessage(playerid, "Você não possui fundos suficientes para pagar está multa $%i.", Ticket[playerid][tAmount]);
 
 	SM1(playerid, "You paid the fine: \"%.20s...\", price $%i.", Ticket[playerid][tReason], Ticket[playerid][tAmount]);
-    SendHelpMessage(playerid, "You still have unpaid fines - %i.", CountPlayerTickets(playerid)-1);
+    SendHelpMessage(playerid, "Você ainda tem multas não pagas - %i.", CountPlayerTickets(playerid)-1);
 	GiveCash(playerid, -Ticket[playerid][tAmount]);
 	
 	new query[128];

@@ -15,9 +15,9 @@ CMD:vtickets(playerid, params[])
 {
 	new vehicle = GetPlayerVehicleID(playerid);
 
-	if (!IsValidVehicle(PlayerInfo[playerid][pCarKey]))					return SendErrorMessage(playerid, "Your vehicle is not spawned.");
+	if (!IsValidVehicle(PlayerInfo[playerid][pCarKey]))					return SendErrorMessage(playerid, "Seu veículo não está spawnado.");
 	if (!vehicle)														return SendNotInVehicle(playerid);
-	if (VehicleInfo[vehicle][carOwnerID] != PlayerInfo[playerid][pID])	return SendErrorMessage(playerid, "You are not the owner of this vehicle.");
+	if (VehicleInfo[vehicle][carOwnerID] != PlayerInfo[playerid][pID])	return SendErrorMessage(playerid, "Você não é o proprietário deste veículo.");
 
 	pTemp[playerid][pDialogList] = 0;	
 	
