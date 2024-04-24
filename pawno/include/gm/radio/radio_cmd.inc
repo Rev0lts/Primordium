@@ -287,7 +287,7 @@ CMD:r(playerid, params[])
 				return 1;
 			} else if (CompareStrings(tag, "10-28")) {
 				new plates[10], vehicle;
-				if (sscanf(arg, "s[10]", plates))				 return SendErrorMessage(playerid, "/r 10-28 [plates]");
+				if (sscanf(arg, "s[10]", plates))				 return SendErrorMessage(playerid, "/r 10-28 [placas]");
 				if ((vehicle = FindVehicleByPlate(plates)) == -1) return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: Nenhum resultado encontrado..");
 				
 				PlayCrimeReportForPlayer(playerid, playerid, 13);
