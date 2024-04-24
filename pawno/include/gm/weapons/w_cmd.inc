@@ -1,7 +1,7 @@
 CMD:recarregar(playerid, params[])
 {
-	if (PlayerInfo[playerid][pPlayerWeapon] && PlayerInfo[playerid][pPlayerAmmo])	return SendErrorMessage(playerid, "Your weapon is already loaded. ");
-    if (!PlayerInfo[playerid][pPlayerWeapon]) 										return SendErrorMessage(playerid, "You have no weapon in your hands. ");
+	if (PlayerInfo[playerid][pPlayerWeapon] && PlayerInfo[playerid][pPlayerAmmo])	return SendErrorMessage(playerid, "A sua arma já está carregada. ");
+    if (!PlayerInfo[playerid][pPlayerWeapon]) 										return SendErrorMessage(playerid, "Você não tem nenhuma arma nas mãos. ");
 	
 	new slotid = -1;
 	for(new i = 0; i < MAX_INV_SLOTS; i++)
@@ -12,14 +12,14 @@ CMD:recarregar(playerid, params[])
 			break;
 		}
 	}
-	if (slotid == -1) return SendErrorMessage(playerid, "You do not have a suitable cartridge for this weapon.");
+	if (slotid == -1) return SendErrorMessage(playerid, "Você não tem um cartucho adequado para esta arma.");
 
 	PlayerInfo[playerid][pAmmoType] = Inventory[playerid][slotid][pInvItem];
 	PlayerInfo[playerid][pPlayerAmmo] = Inventory[playerid][slotid][pInvQ];
 
 	GivePlayerWeaponEx(playerid, PlayerInfo[playerid][pPlayerWeapon], PlayerInfo[playerid][pPlayerAmmo], PlayerInfo[playerid][pAmmoType], PlayerInfo[playerid][pWepSerial]);
             
-	SM1(playerid, "You reloaded %s - %s (%i round(s)).", inventory_items[PlayerInfo[playerid][pPlayerWeapon]][itemName], inventory_items[PlayerInfo[playerid][pAmmoType]][itemName], PlayerInfo[playerid][pPlayerAmmo]);
+	SM1(playerid, "Você recarregou %s - %s (%i round(s)).", inventory_items[PlayerInfo[playerid][pPlayerWeapon]][itemName], inventory_items[PlayerInfo[playerid][pAmmoType]][itemName], PlayerInfo[playerid][pPlayerAmmo]);
 
 	new mes[64];
 	format(mes, sizeof(mes), "* %s recharges %s", GetNameEx(playerid), inventory_items[PlayerInfo[playerid][pPlayerWeapon]][itemName]);
@@ -39,7 +39,7 @@ CMD:arma(playerid, params[])
 	if (sscanf(params, "s[24]D(-1)D(-1)D(-1)", option, secoption, thirdoption, fourthoption)) 
 	{
 		SendHelpMessage(playerid, "/arma [editar / corpo / esconder / resetar]");
-		SendSyntaxMessage(playerid, "Use {ffc46a}/weaponhelp{FFFFFF} for more details.");
+		SendSyntaxMessage(playerid, "Use {ffc46a}/weaponhelp{FFFFFF} para mais detalhes.");
 		return 1;
 	}
 
@@ -48,17 +48,17 @@ CMD:arma(playerid, params[])
 		new slot, bone, type;
 		if (sscanf(params, "{s[7]}ddD(-1)", slot, bone, type))
 		{
-			SendHelpMessage(playerid, "/weapon bone [slot] [bone]");
-			SendSyntaxMessage(playerid, "Slot  - [ 1 - Hand weapon | 2 - Secondary weapon | 3 - Primary weapon ]");
-			SendSyntaxMessage(playerid, "Bone - [ 1 - Spine | 3 - Left arm shoulder | 4 - Right shoulder | 5 - Left hand | 6 - Right hand ]");
-			SendSyntaxMessage(playerid, "Bone - [ 7 - Right thigh | 8 - Left thigh | 9 - Left leg | 10 - Right leg ]");
+			SendHelpMessage(playerid, "/weapon bone [slot] [parte do corpo]");
+			SendSyntaxMessage(playerid, "Slot  - [ 1 - Arma de mão | 2 - Arma secundária | 3 - Arma primária ]");
+			SendSyntaxMessage(playerid, "Bone - [ 1 - Espinha | 3 - Ombro esquerdo | 4 - Ombro direito | 5 - Mão esquerda | 6 - Mão direita ]");
+			SendSyntaxMessage(playerid, "Bone - [ 7 - Coxa direita | 8 - Coxa esquerda | 9 - Perna esquerda | 10 - Perna direita ]");
 			return 1;
 		}
 
-		if (slot > 3 || slot < 1)						return SendErrorMessage(playerid, "Slot 1 to 3.");
-		if (IsPlayerHoldingWeapon(playerid))				return SendErrorMessage(playerid, "Put the weapon in inventory.");
-		if (bone < 1 || bone == 2 || bone > 10)  		return SendErrorMessage(playerid, "ID bones from 1 to 10 (except 2).");
-		if (GetPVarInt(playerid, #edit_weapon) != 0)		return SendErrorMessage(playerid, "You are already editing the position of the weapon.");
+		if (slot > 3 || slot < 1)						return SendErrorMessage(playerid, "Slot 1 ao 3.");
+		if (IsPlayerHoldingWeapon(playerid))				return SendErrorMessage(playerid, "Coloque a arma no inventário.");
+		if (bone < 1 || bone == 2 || bone > 10)  		return SendErrorMessage(playerid, "Identifique os ossos de 1 a 10, excluindo o número 2");
+		if (GetPVarInt(playerid, #edit_weapon) != 0)		return SendErrorMessage(playerid, "Você já está editando a posição da arma.");
 
 		new weaponid = -1;
 		for(new i = 0; i < MAX_INV_SLOTS; i++)
@@ -69,7 +69,7 @@ CMD:arma(playerid, params[])
 				break;
 			}
 		}
-		if (weaponid == -1)	return SendErrorMessage(playerid, "You don't have a weapon suitable for the slot in your inventory.");
+		if (weaponid == -1)	return SendErrorMessage(playerid, "Você não tem uma arma adequada para o slot em seu inventário.");
 
         SetPVarInt(playerid, #edit_weapon, slot);
 		SetPlayerAttachedObject(playerid, 4 + slot, inventory_items[weaponid][itemModel], PlayerInfo[playerid][pWeaponBone][slot-1]);
@@ -81,10 +81,10 @@ CMD:arma(playerid, params[])
 	{
 		new slot;
 
-		if (sscanf(params, "{s[7]}d", slot))		 return SendHelpMessage(playerid, "/weapon adjust [Slot (1 - Hand weapon | 2 - Secondary weapon | 3 - Primary weapon)]");
-		if (slot > 3 || slot < 1)					 return SendErrorMessage(playerid, "Slot 1 to 3.");
-		if (IsPlayerHoldingWeapon(playerid))		 return SendErrorMessage(playerid, "Put the weapon in inventory.");
-		if (GetPVarInt(playerid, #edit_weapon) != 0) return SendErrorMessage(playerid, "You are already editing the position of the weapon.");
+		if (sscanf(params, "{s[7]}d", slot))		 return SendHelpMessage(playerid, "/weapon adjust [(1 - Arma de mão | 2 - Arma secundária | 3 - Arma primária)]");
+		if (slot > 3 || slot < 1)					 return SendErrorMessage(playerid, "Slot 1 ao 3.");
+		if (IsPlayerHoldingWeapon(playerid))		 return SendErrorMessage(playerid, "Coloque a arma no inventário.");
+		if (GetPVarInt(playerid, #edit_weapon) != 0) return SendErrorMessage(playerid, "Você já está editando a posição da arma.");
 		
 		new weaponid = -1;
 		for(new i = 0; i < MAX_INV_SLOTS; i++)
@@ -95,7 +95,7 @@ CMD:arma(playerid, params[])
 				break;
 			}
 		}
-		if (weaponid == -1)	return SendErrorMessage(playerid, "You don't have a weapon suitable for the slot in your inventory.");
+		if (weaponid == -1)	return SendErrorMessage(playerid, "Você não tem uma arma adequada para o slot em seu inventário.");
 
 		SetPVarInt(playerid, #edit_weapon, slot);
 		EditAttachedObject(playerid, 4 + slot);
@@ -105,8 +105,8 @@ CMD:arma(playerid, params[])
 	{
 		new slot;
 
-		if (sscanf(params, "{s[7]}d", slot))	return SendHelpMessage(playerid, "/weapon reset [Slot (1 - Hand weapon | 2 - Secondary weapon | 3 - Primary weapon)]");
-		if (slot > 3 || slot < 1)			return SendErrorMessage(playerid, "Slot 1 to 3.");
+		if (sscanf(params, "{s[7]}d", slot))	return SendHelpMessage(playerid, "/weapon reset [(1 - Arma de mão | 2 - Arma secundária | 3 - Arma primária)]");
+		if (slot > 3 || slot < 1)			return SendErrorMessage(playerid, "Slot 1 ao 3.");
 
 		if (slot == 1)
 		{
@@ -119,7 +119,7 @@ CMD:arma(playerid, params[])
 			PlayerInfo[playerid][pWeaponRZ][0] = 0.0;
 			RemovePlayerAttachedObject(playerid, 5);
 			Save_AttachWeapon(playerid, 0);
-			SendSyntaxMessage(playerid, "You have returned the original handgun position.");
+			SendSyntaxMessage(playerid, "Você retornou à posição original da arma de mão.");
 		}
 		else if (slot == 2)
 		{
@@ -132,7 +132,7 @@ CMD:arma(playerid, params[])
 			PlayerInfo[playerid][pWeaponRZ][1] = -1.7;
 			RemovePlayerAttachedObject(playerid, 6);
 			Save_AttachWeapon(playerid, 1);
-			SendSyntaxMessage(playerid, "You have returned the original position of the main weapon.");
+			SendSyntaxMessage(playerid, "Você retornou à posição original da arma principal.");
 		}
 		else if (slot == 3)
 		{
@@ -145,7 +145,7 @@ CMD:arma(playerid, params[])
 			PlayerInfo[playerid][pWeaponRZ][2] = -0.099999;
 			RemovePlayerAttachedObject(playerid, 7);
 			Save_AttachWeapon(playerid, 2);
-			SendSyntaxMessage(playerid, "You have reset the secondary weapon to its original position.");
+			SendSyntaxMessage(playerid, "Você resetou a posição original da arma secundária.");
 		}
 		CallRemoteFunction("LoadHolsters","i",playerid);
 		return 1;
@@ -154,9 +154,9 @@ CMD:arma(playerid, params[])
 	{
 		new slot;
 
-		if (sscanf(params, "{s[7]}d", slot))		 return SendHelpMessage(playerid, "/weapon hide [Slot (1 - Hand weapon | 2 - Secondary weapon | 3 - Primary weapon)]");
-		if (slot > 3 || slot < 1)					 return SendErrorMessage(playerid, "Slot 1 to 3.");
-		if (GetPVarInt(playerid, #edit_weapon) != 0) return SendErrorMessage(playerid, "You are already editing the position of the weapon.");
+		if (sscanf(params, "{s[7]}d", slot))		 return SendHelpMessage(playerid, "/weapon hide [Slot (1 - Arma de mão | 2 - Arma secundária | 3 - Arma primária)]");
+		if (slot > 3 || slot < 1)					 return SendErrorMessage(playerid, "Slot 1 ao 3.");
+		if (GetPVarInt(playerid, #edit_weapon) != 0) return SendErrorMessage(playerid, "Você já está editando a posição da arma.");
 		
 		new weaponid = -1;
 		for(new i = 0; i < MAX_INV_SLOTS; i++)
@@ -167,15 +167,15 @@ CMD:arma(playerid, params[])
 				break;
 			}
 		}
-		if (weaponid == -1)				return SendErrorMessage(playerid, "You do not have a suitable weapon in your inventory.");
-		if (IsWeaponDontHide(weaponid))	return SendErrorMessage(playerid, "You cannot hide this weapon.");
+		if (weaponid == -1)				return SendErrorMessage(playerid, "Você não tem uma arma adequada em seu inventário.");
+		if (IsWeaponDontHide(weaponid))	return SendErrorMessage(playerid, "Você não pode esconder esta arma.");
 
 		PlayerInfo[playerid][pHideWeap][slot-1] = (PlayerInfo[playerid][pHideWeap][slot-1]) ? (0) : (1);
 
-		if (!PlayerInfo[playerid][pHideWeap][slot-1])	SendSyntaxMessage(playerid, "You drew your weapon. / slot: %i /", slot);
+		if (!PlayerInfo[playerid][pHideWeap][slot-1])	SendSyntaxMessage(playerid, "Você sacou sua arma. / slot: %i /", slot);
 		else
 		{
-		    SendSyntaxMessage(playerid, "You hid a weapon. / slot: %i /", slot);
+		    SendSyntaxMessage(playerid, "Você escondeu uma arma. / slot: %i /", slot);
             RemovePlayerAttachedObject(playerid, 4 + slot);
 		}
 
@@ -193,7 +193,7 @@ CMD:optica(playerid, params[])
 {
     if (PlayerHoldingWeapon(playerid, 33))
  	{
-		if (!IsPlayerHasItem(playerid, INV_OPTICS))	return SendErrorMessage(playerid, "You don't have a telescopic sight.");
+		if (!IsPlayerHasItem(playerid, INV_OPTICS))	return SendErrorMessage(playerid, "Você não tem uma mira telescópica.");
 
         RemovePlayerItem(playerid, INV_OPTICS, 1);
 
@@ -203,12 +203,12 @@ CMD:optica(playerid, params[])
   		GivePlayerWeaponEx(playerid, 34, PlayerInfo[playerid][pPlayerAmmo], PlayerInfo[playerid][pAmmoType], PlayerInfo[playerid][pWepSerial]);
     	ApplyAnimation(playerid, "RIFLE", "rifle_load", 4.1, 0, 0, 0, 0, 0, 1);
 
-		SendSyntaxMessage(playerid, "You are wearing a telescopic sight.");
+		SendSyntaxMessage(playerid, "Você está usando uma mira telescópica.");
 		return 1;
 	}
  	else if (PlayerHoldingWeapon(playerid, 34))
   	{
-		if (GiveInvItem(playerid, INV_OPTICS, 1))	return SendErrorMessage(playerid, "There is no room in your inventory for a telescopic sight.");
+		if (GiveInvItem(playerid, INV_OPTICS, 1))	return SendErrorMessage(playerid, "Não a espaço em seu inventário para uma mira telescópica.");
 
 		if (PlayerInfo[playerid][pPlayerAmmo])	ResetPlayerWeapons(playerid);
 		else 									RemovePlayerAttachedObject(playerid, 9);
@@ -216,24 +216,24 @@ CMD:optica(playerid, params[])
   		GivePlayerWeaponEx(playerid, 33, PlayerInfo[playerid][pPlayerAmmo], PlayerInfo[playerid][pAmmoType], PlayerInfo[playerid][pWepSerial]);
     	ApplyAnimation(playerid, "RIFLE", "rifle_load", 4.1, 0, 0, 0, 0, 0, 1);
 
-    	SendSyntaxMessage(playerid, "You have removed the telescopic sight.");
+    	SendSyntaxMessage(playerid, "Você removeu a mira telescópica.");
      	return 1;
     }
     
-    SendErrorMessage(playerid, "You should have a gun with a scope or a regular gun in your hands.");
+    SendErrorMessage(playerid, "Você deveria ter uma arma com luneta ou uma arma regular em suas mãos.");
 	return 1;
 }
 
 CMD:silenciador(playerid, params[])
 {
-    if (pTemp[playerid][pTaser])	return SendErrorMessage(playerid, "Remove the shocker.");
+    if (pTemp[playerid][pTaser])	return SendErrorMessage(playerid, "Remova o choque elétrico.");
 
 	if (PlayerInfo[playerid][pPlayerWeapon] == 22)
  	{
 		//if (PlayerInfo[playerid][pPlayerWeapon] == 22)	return SendErrorMessage(playerid, "Ó âàñ â ðóêàõ äîëæåí áûòü ïèñòîëåò ñ ãëóøèòåëåì èëè îáû÷íûé ïèñòîëåò.");
-		if (!IsPlayerHasItem(playerid, INV_SILENCER))	return SendErrorMessage(playerid, "You don't have a muffler.");
+		if (!IsPlayerHasItem(playerid, INV_SILENCER))	return SendErrorMessage(playerid, "Você não tem um silenciador");
 
-		SendSyntaxMessage(playerid, "You have put on a muffler.");
+		SendSyntaxMessage(playerid, "Você colocou um silenciador.");
 
 		if (PlayerInfo[playerid][pPlayerAmmo])	ResetPlayerWeapons(playerid);
 		else 									RemovePlayerAttachedObject(playerid, 9);
@@ -246,9 +246,9 @@ CMD:silenciador(playerid, params[])
 	}
  	else if (PlayerInfo[playerid][pPlayerWeapon] == 23)
   	{
-		if (GiveInvItem(playerid, INV_SILENCER, 1) == -1)	return SendErrorMessage(playerid, "There is no room for a silencer in your inventory.");
+		if (GiveInvItem(playerid, INV_SILENCER, 1) == -1)	return SendErrorMessage(playerid, "Não a espaço para um silenciador em seu inventário.");
 
-		SendSyntaxMessage(playerid, "You have removed the muffler.");
+		SendSyntaxMessage(playerid, "Você removeu o silenciador.");
 
   		if (PlayerInfo[playerid][pPlayerAmmo])	ResetPlayerWeapons(playerid);
 		else 									RemovePlayerAttachedObject(playerid, 9);
@@ -258,7 +258,7 @@ CMD:silenciador(playerid, params[])
      	return 1;
     }
 
-	SendErrorMessage(playerid, "You should have a silenced pistol or a regular pistol in your hands.");
+	SendErrorMessage(playerid, "Você deveria ter uma pistola silenciada ou uma pistola regular em suas mãos.");
 	return 1;
 }
 
@@ -266,9 +266,9 @@ ALTX:takeprime("/tap","/armaprimaria");
 CMD:takeprime(playerid, params[])
 {
     if (PlayerInfo[playerid][pInjured] != 0 || GetPVarInt(playerid, "Freeze") || pTemp[playerid][pTaserTime] || pTemp[playerid][pCuffed] || PlayerInfo[playerid][pJailed] || PlayerInfo[playerid][pAJailed])  
-		return SendErrorMessage(playerid, "You cannot use this feature right now.");
+		return SendErrorMessage(playerid, "Você não pode usar esse recurso agora.");
 
-	if (PlayerInfo[playerid][pPlayerWeapon]) return SendErrorMessage(playerid, "You already have a weapon in your hands! ");
+	if (PlayerInfo[playerid][pPlayerWeapon]) return SendErrorMessage(playerid, "Você já tem uma arma em suas mãos. ");
 
 	new foundid = -1, 
 		str[64];
@@ -296,7 +296,7 @@ CMD:takeprime(playerid, params[])
 			}
 		}
 	}
-	if (foundid == -1) return SendErrorMessage(playerid, "You don't have large-caliber weapons!");
+	if (foundid == -1) return SendErrorMessage(playerid, "Você não tem armas de alto calibre!");
 
     GivePlayerWeaponEx(playerid, Inventory[playerid][foundid][pInvItem], Inventory[playerid][foundid][pInvQ], Inventory[playerid][foundid][pInvEx], Inventory[playerid][foundid][pInvS]);
 	ApplyAnimation(playerid, "SILENCED", "Silence_reload", 3.0, 0, 0, 0, 0, 0);
