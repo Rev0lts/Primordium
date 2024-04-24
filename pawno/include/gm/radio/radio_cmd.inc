@@ -151,48 +151,48 @@ CMD:channel(playerid, params[])
 
 	else 
 	{
-		SendHelpMessage(playerid, "/(ch)annel [set / leave / rent / sell]");
+		SendHelpMessage(playerid, "/canal [set / leave / rent / sell]");
 	}
 	return 1;
 }
 
 CMD:setslot(playerid, params[])
 {
-    if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
+    if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
 
 	new slot;
 
 	if (sscanf(params,"d",slot))			return SendHelpMessage(playerid, "/setslot [slot (0-100)]");
-	if (slot < 0 || slot > 100)			return SendErrorMessage(playerid, "Slot from 0 to 100. ");
-	if (slot == GetPlayerSlot(playerid))	return SendErrorMessage(playerid, "You are already using this slot. ");
+	if (slot < 0 || slot > 100)			return SendErrorMessage(playerid, "Slot de 0 a 100. ");
+	if (slot == GetPlayerSlot(playerid))	return SendErrorMessage(playerid, "Você já está usando este slot.");
 
 	SetRadioSlot(playerid, slot);
-	SendRadioMsg(playerid, "Frequency replaced [SLOT: %i]", slot);
+	SendRadioMsg(playerid, "Frequência alterada [SLOT: %i]", slot);
 	return 1;
 }
 
 CMD:auth(playerid, params[])
 {
-    if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-	if (!GetPlayerChannel(playerid))					return SendErrorMessage(playerid, "Your radio is off.");
-	if (PlayerInfo[playerid][pAuthed])				return SendErrorRadioMessage(playerid, "You are already logged in to this channel. ");
+    if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um radio.");
+	if (!GetPlayerChannel(playerid))					return SendErrorMessage(playerid, "Seu rádio está desligado.");
+	if (PlayerInfo[playerid][pAuthed])				return SendErrorRadioMessage(playerid, "Você já está conectado neste canal. ");
 
 	new id = -1;
 
-	if ((id = ChannelExists(GetPlayerChannel(playerid))) == 0)	return SendErrorMessage(playerid, "Channel not found.");
+	if ((id = ChannelExists(GetPlayerChannel(playerid))) == 0)	return SendErrorMessage(playerid, "Canal não encontrado.");
 
 	if (CompareStrings(RadiosInfo[id][radioPass], ""))
 	{
-	    SendRadioMsg(playerid, "You are logged in to the channel %i.", GetPlayerChannel(playerid));
+	    SendRadioMsg(playerid, "Você está conectado ao canal %i.", GetPlayerChannel(playerid));
 		PlayerInfo[playerid][pAuthed] = 1;
 		PlaySound(playerid, 6400);
 	    return 1;
 	}
 
-	if (isnull(params))										return SendHelpMessage(playerid, "/auth [channel password]");
-	if (CompareStrings(RadiosInfo[id][radioPass], params))	return SendErrorRadioMessage(playerid, "You entered the wrong password.");
+	if (isnull(params))										return SendHelpMessage(playerid, "/auth [senha do canal]");
+	if (CompareStrings(RadiosInfo[id][radioPass], params))	return SendErrorRadioMessage(playerid, "Você inseriu a senha errada.");
 
-	SendRadioMsg(playerid, "You are logged in to the channel [CH: %i].", GetPlayerChannel(playerid));
+	SendRadioMsg(playerid, "Você está conectado ao canal. [CH: %i].", GetPlayerChannel(playerid));
 	PlayerInfo[playerid][pAuthed] = 1;
 	PlaySound(playerid, 6400);
 	return 1;
@@ -200,18 +200,18 @@ CMD:auth(playerid, params[])
 
 CMD:newauth(playerid, params[])
 {
-	if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "You are not renting a channel.");
+	if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "Você não está alugando um canal.");
 
     new id = -1;
 
-	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)				return SendErrorMessage(playerid, "Channel not found."); 
-	if (isnull(params))																return SendHelpMessage(playerid, "/newauth [new password | if you want to remove the password, then do not enter anything]");
-	if (strlen(params) < 1 || strlen(params) > 32)									return SendErrorMessage(playerid, "Characters from 1 to 32.");
-	if (CompareStrings(RadiosInfo[id][radioPass], "") && CompareStrings(params, ""))	return SendErrorMessage(playerid, "Your channel has no password.");
-	if (!CompareStrings(params, "") && StringHasSymbols(params))						return SendErrorMessage(playerid, "Only letters and numbers can be used in the password.");
+	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)				return SendErrorMessage(playerid, "Canal não encontrado."); 
+	if (isnull(params))																return SendHelpMessage(playerid, "/newauth [nova senha | se deseja remover a senha, então não insira nada]");
+	if (strlen(params) < 1 || strlen(params) > 32)									return SendErrorMessage(playerid, "Caracteres de 1 a 32.");
+	if (CompareStrings(RadiosInfo[id][radioPass], "") && CompareStrings(params, ""))	return SendErrorMessage(playerid, "Seu canal não possui senha.");
+	if (!CompareStrings(params, "") && StringHasSymbols(params))						return SendErrorMessage(playerid, "Apenas letras e números podem ser usados na senha.");
 
-	if (CompareStrings(params, ""))	SendRadioMsg(playerid, "Your channel now has no password. ");
-	else							SendRadioMsg(playerid, "You changed your channel password to %s.", params);
+	if (CompareStrings(params, ""))	SendRadioMsg(playerid, "Seu canal agora não possui senha. ");
+	else							SendRadioMsg(playerid, "Você alterou a senha do seu canal para %s.", params);
 
 	format(RadiosInfo[id][radioPass], 33, "%s", params);
 	SQL_SetString("radios", "pass", RadiosInfo[id][radioPass], RadiosInfo[id][radioID]);
@@ -220,11 +220,11 @@ CMD:newauth(playerid, params[])
 
 CMD:radiomembers(playerid, params[])
 {
-    if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "You are not renting a channel.");
+    if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "Você não está alugando um canal.");
 
     new id = -1;
 
-	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)	return SendErrorMessage(playerid, "Channel not found.");
+	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)	return SendErrorMessage(playerid, "Canal não encontrado.");
 
 	new dialog_header[64] = "{FFFFFF}Name\t{FFFFFF}ID\n", dialog_body[2048];
 
@@ -243,13 +243,13 @@ CMD:radiomembers(playerid, params[])
 
 CMD:kickoffradio(playerid, params[])
 {
-    if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "You are not renting a channel.");
+    if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "Você não está alugando um canal.");
 
 	new userid;
 
-	if (sscanf(params,"u", userid))	return SendHelpMessage(playerid, "/kickoffradio [ID/Part Of Name]");
+	if (sscanf(params,"u", userid))	return SendHelpMessage(playerid, "/kickoffradio [ID/Parte do Nome]");
 	if (!IsPlayerLogged(userid))		return SendNotConnected(playerid);
-	if (userid == playerid)			return SendErrorMessage(playerid, "You cannot kick yourself out of the channel.");
+	if (userid == playerid)			return SendErrorMessage(playerid, "Você não pode expulsar a si mesmo do canal.");
 
     new id = -1;
 
