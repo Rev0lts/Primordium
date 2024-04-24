@@ -5,7 +5,7 @@ CMD:channel(playerid, params[])
 
 	if (sscanf(params, "s[16]S()[128]", option, secoption))
 	{
-		SendSyntaxMessage(playerid, "/(ch)annel [set / leave / rent / sell]");
+		SendSyntaxMessage(playerid, "/canal [set / leave / rent / sell]");
 		return 1;
 	}
 

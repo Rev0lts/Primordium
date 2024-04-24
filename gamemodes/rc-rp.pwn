@@ -3,7 +3,7 @@
 
 #pragma warning disable 214
 #pragma warning disable 239
-//Teste ind TESTE DO GITHUB
+//Teste ind 
 //////////////////////////////////////////////////////
 //                                                  //
 // 		MYSQL SETTIGNS:                             //
