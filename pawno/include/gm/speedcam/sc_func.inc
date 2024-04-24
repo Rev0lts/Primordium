@@ -5,7 +5,7 @@ public LoadDynamicSpeed()
 {
     new rows = cache_num_rows(), time = GetTickCount(), total;
 
-	if (!rows) return print("[Speedcams] No records found.");
+	if (!rows) return print("[Speedcams] Nenhum registro encontrado.");
 
 	for(new i; i < rows; i++)
 	{

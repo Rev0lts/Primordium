@@ -1,14 +1,14 @@
-ALTX:speedcam("/sc");
+ALTX:speedcam("/sc","/radar");
 CMD:speedcam(playerid, params[])
 {
     new option[16], secoption[128], faction = PlayerInfo[playerid][pFaction];
 
-    if (!IsFactionPolice(faction))       return SendErrorMessage(playerid, "You must be a police officer.");
-    if (!PlayerInfo[playerid][pOnDuty])  return SendErrorMessage(playerid, "You must be a police officer.");
+    if (!IsFactionPolice(faction))       return SendErrorMessage(playerid, "Você deve ser um policial.");
+    if (!PlayerInfo[playerid][pOnDuty])  return SendErrorMessage(playerid, "Você deve ser um policial.");
 
     if (sscanf(params, "s[16]S()[128]", option, secoption)) 
     {
-        SendHelpMessage(playerid, "/sc [options]");
+        SendHelpMessage(playerid, "/sc [opções]");
         SendHelpMessage(playerid, "create / remove / edit / list");
         return 1;
     }
@@ -17,10 +17,10 @@ CMD:speedcam(playerid, params[])
     {
         new id = SC_GetFreeID(), sp_limit, sp_name[32], sp_near = GetNearestSpeed(playerid, 20.0), sp_zone[64];
 
-        if (id == -1)                                        return SendErrorMessage(playerid, "All slots for cameras are occupied.");
-        if (sp_near != -1)                                   return SendErrorMessage(playerid, "A speed camera is already working in this radius.");
-        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "This command is available from %i rank.", SC_MIN_INSTALL);
-        if (sscanf(secoption, "d", sp_limit))                return SendHelpMessage(playerid, "/sc create [speed mode]");
+        if (id == -1)                                        return SendErrorMessage(playerid, "Todas as vagas para câmeras estão ocupadas.");
+        if (sp_near != -1)                                   return SendErrorMessage(playerid, "Um radar já está operando neste raio");
+        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "Este comando está disponível a partir do rank %i.", SC_MIN_INSTALL);
+        if (sscanf(secoption, "d", sp_limit))                return SendHelpMessage(playerid, "/sc create [velocidade]");
         if (sp_limit <= 0 || sp_limit > SC_MAX_SPEED)        return SendErrorMessage(playerid, "Speed ??limit from 1 to %d.", SC_MAX_SPEED);
 
         GetPlayerPos(playerid, speedcam[id][sc_x], speedcam[id][sc_y], speedcam[id][sc_z]);
@@ -45,8 +45,8 @@ CMD:speedcam(playerid, params[])
         speedcam[id][sc_areaid] = CreateDynamicSphere(speedcam[id][sc_x], speedcam[id][sc_y], speedcam[id][sc_z], SC_DEF_RADIUS, speedcam[id][sc_vw], speedcam[id][sc_int]);
 
         AddSpeedcamToFile(id, sp_limit, sp_name, speedcam[id][sc_x], speedcam[id][sc_y], speedcam[id][sc_z], 0.0, 0.0, 0.0, speedcam[id][sc_int], speedcam[id][sc_vw]);
-        SM2(playerid, "You have created a video capture camera [ID: %i] %s | Speed ??limit: %d.", id, speedcam[id][sc_name], sp_limit);
-        SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s installed speed camera %s | Speed ??limit: %d. ))", GetName(playerid), speedcam[id][sc_name], sp_limit);
+        SM2(playerid, "Você criou um radar [ID: %i] %s | Speed ??limit: %d.", id, speedcam[id][sc_name], sp_limit);
+        SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s radar instalado %s | Speed ??limit: %d. ))", GetName(playerid), speedcam[id][sc_name], sp_limit);
         return 1;
     }
 
@@ -54,8 +54,8 @@ CMD:speedcam(playerid, params[])
     {
         new sp_near = GetNearestSpeed(playerid, 20.0);
         
-        if (sp_near == -1)                                   return SendErrorMessage(playerid, "There are no speed cameras in this radius. ");
-        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "This command is available from %i rank.", SC_MIN_INSTALL);
+        if (sp_near == -1)                                   return SendErrorMessage(playerid, "Não a radar neste raio. ");
+        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "Este comando está disponível a partir do rank %i.", SC_MIN_INSTALL);
 
         if (IsValidDynamicObject(speedcam[sp_near][sc_object]))
         {
@@ -65,8 +65,8 @@ CMD:speedcam(playerid, params[])
 
         new sql_query[128];
 
-        SendWarningMessage(playerid, "You removed the camera [ID: %i | %s].", sp_near, speedcam[sp_near][sc_name]);
-        SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s removed speed camera [%s]. ))", GetName(playerid), speedcam[sp_near][sc_name]);
+        SendWarningMessage(playerid, "Você removeu o radar [ID: %i | %s].", sp_near, speedcam[sp_near][sc_name]);
+        SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s radar removido [%s]. ))", GetName(playerid), speedcam[sp_near][sc_name]);
 
         speedcam[sp_near][sc_name] = EOS;
         Iter_Remove(speedcamObjects, sp_near);
@@ -80,12 +80,12 @@ CMD:speedcam(playerid, params[])
     {
         new sp_near = GetNearestSpeed(playerid, 15.0), thirdoption[64], fouroption[64];
 
-        if (sp_near == -1)                                   return SendErrorMessage(playerid, "There are no speed cameras in this radius. ");   
-        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "This command is available from %i rank.", SC_MIN_INSTALL);
+        if (sp_near == -1)                                   return SendErrorMessage(playerid, "Não a radar neste raio. ");   
+        if (PlayerInfo[playerid][pRank] < SC_MIN_INSTALL)    return SendErrorMessage(playerid, "Este comando está disponível a partir do rank %i.", SC_MIN_INSTALL);
         
         if (sscanf(secoption, "s[64]S()[64]", thirdoption, fouroption))        
         {
-            SendHelpMessage(playerid, "/sc edit [options]");
+            SendHelpMessage(playerid, "/sc edit [opções]");
             SendHelpMessage(playerid, "pos limit");
             return 1;
         }
@@ -94,13 +94,13 @@ CMD:speedcam(playerid, params[])
         {
             new sp_limit;
 
-            if (sscanf(fouroption, "d", sp_limit))           return SendHelpMessage(playerid, "/sc edit limit [speed limit]");
+            if (sscanf(fouroption, "d", sp_limit))           return SendHelpMessage(playerid, "/sc edit limit [limite velocidade]");
             if (sp_limit <= 0 || sp_limit > SC_MAX_SPEED)    return SendErrorMessage(playerid, "Speed ??limit from 1 to %d.", SC_MAX_SPEED);
 
             speedcam[sp_near][sc_speed] = sp_limit;
             SQL_SetInteger("speedcams", "speed", speedcam[sp_near][sc_speed], speedcam[sp_near][sc_id]);
-            SendSyntaxMessage(playerid, "You have changed the speed mode of the camera [ID: %i] %s on %d.", sp_near, speedcam[sp_near][sc_name], sp_limit);
-            SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s changed the speed mode of the camera [ID: %i] %s on %d. ))", GetName(playerid), sp_near, speedcam[sp_near][sc_name], sp_limit);
+            SendSyntaxMessage(playerid, "Você alterou a velocidade do radar [ID: %i] %s on %d.", sp_near, speedcam[sp_near][sc_name], sp_limit);
+            SendFactionMessageF(FACTION_POLICE, COLOR_POLICECHAT, "(( %s Alteração de velocidade no radar [ID: %i] %s on %d. ))", GetName(playerid), sp_near, speedcam[sp_near][sc_name], sp_limit);
             return 1;
         }
 
