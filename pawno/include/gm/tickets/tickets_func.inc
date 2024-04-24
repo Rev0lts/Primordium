@@ -49,7 +49,7 @@ this::ShowCarsTickets(playerid, back)
 		
 		if (CountVehicleIDTickets(cache_get_field_content_int(0, "vehicle")) > MAX_TICKETS*(pTemp[playerid][pDialogList]+1)) format(string, sizeof(string), "%s\n{bccd32}>>", string);
     }
-    else return SendWarningMessage(playerid, "This vehicle has no unpaid fines.");
+    else return SendWarningMessage(playerid, "Este veículo não possui multas.");
 
 	return Dialog_Show(playerid, VehicleFines, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF} List of unpaid penalties", string, "Select", "Close");
 }
@@ -145,7 +145,7 @@ this::ShowPlayersTickets(playerid, back)
 		
 		if (CountPlayerTickets(playerid) > MAX_TICKETS*(pTemp[playerid][pDialogList]+1)) format(string, sizeof(string), "%s\n{bccd32}>>", string);
     }
-    else return SendWarningMessage(playerid, "No unpaid fines!");
+    else return SendWarningMessage(playerid, "Nenhuma multa não paga!");
 
 	Dialog_Show(playerid, ShowPlayerFinesShow, DIALOG_STYLE_TABLIST_HEADERS, "{FFFFFF}List of unpaid fines", string, "Select", "Close");
 	return 1;
