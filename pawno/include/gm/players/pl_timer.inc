@@ -147,7 +147,7 @@ this::PlayerTimer()
 		{
 			if (0 == IsPlayerAtPayphone(i, pTemp[i][pPayphone]))
 			{
-				SendWarningMessage(i, "You have gone too far from the payphone.");
+				SendWarningMessage(i, "Você se afastou demais do orelhão.");
 				cancelPayphone(i);
 			}
         }
