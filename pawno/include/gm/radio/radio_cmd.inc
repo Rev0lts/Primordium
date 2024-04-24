@@ -1,4 +1,4 @@
-ALTX:channel("/ch");
+ALTX:channel("/ch","/canal");
 CMD:channel(playerid, params[])
 {
 	new option[16], secoption[128];
