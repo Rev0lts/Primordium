@@ -11,16 +11,16 @@ CMD:channel(playerid, params[])
 
 	if (CompareStrings(option, "set"))
 	{
-		if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
+		if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
 		
 		new channelid;
 
 		if (sscanf(secoption, "i", channelid))						return SendHelpMessage(playerid, "(/ch)annel set [channel]");
-		if (!ChannelExists(channelid))								return SendErrorMessage(playerid, "Channel not found.");
-		if (channelid == 911 && !IsPlayerFactionPolice(playerid))	return SendErrorMessage(playerid,"Radio channel reserved.");
-		if (channelid == 912 && !IsPlayerFactionMedic(playerid))	return SendErrorMessage(playerid, "Radio channel reserved.");
-		if (channelid == 998 && !IsPlayerFactionFire(playerid))		return SendErrorMessage(playerid, "Radio channel reserved.");
-		if (channelid == GetPlayerChannel(playerid))				return SendErrorMessage(playerid, "You are already connected to this channel.");
+		if (!ChannelExists(channelid))								return SendErrorMessage(playerid, "Canal não encontrado.");
+		if (channelid == 911 && !IsPlayerFactionPolice(playerid))	return SendErrorMessage(playerid,"Canal de rádio reservado.");
+		if (channelid == 912 && !IsPlayerFactionMedic(playerid))	return SendErrorMessage(playerid, "Canal de rádio reservado.");
+		if (channelid == 998 && !IsPlayerFactionFire(playerid))		return SendErrorMessage(playerid, "Canal de rádio reservado.");
+		if (channelid == GetPlayerChannel(playerid))				return SendErrorMessage(playerid, "Você já está conectado a este canal.");
 		
 		if (channelid == 911 && IsPlayerFactionPolice(playerid))
 		{
@@ -32,7 +32,7 @@ CMD:channel(playerid, params[])
 
 		else if (channelid == 912 && IsPlayerFactionMedic(playerid))
 		{
-			SendRadioMsg(playerid, "Channel changed [CH: %i].", channelid);
+			SendRadioMsg(playerid, "Canal alterado [CH: %i].", channelid);
 			PlayerInfo[playerid][pAuthed] = 1;
 			SetRadioChannel(playerid, channelid);
 			return 1;
@@ -40,7 +40,7 @@ CMD:channel(playerid, params[])
 
 		else if (channelid == 998 && IsPlayerFactionFire(playerid))
 		{
-			SendRadioMsg(playerid, "Channel changed [CH: %i].", channelid);
+			SendRadioMsg(playerid, "Canal alterado [CH: %i].", channelid);
 			PlayerInfo[playerid][pAuthed] = 1;
 			SetRadioChannel(playerid, channelid);
 			return 1;
@@ -48,17 +48,17 @@ CMD:channel(playerid, params[])
 
 		PlayerInfo[playerid][pAuthed] = 0;
 		SetRadioChannel(playerid, channelid);
-		SendRadioMsg(playerid, "Channel changed [CH: %i].", channelid);
-		SendHelpMessage(playerid, "Use /auth to log in.");
+		SendRadioMsg(playerid, "Canal alterado [CH: %i].", channelid);
+		SendHelpMessage(playerid, "Use /auth para fazer login.");
 		return 1;
 	}
 
 	else if (CompareStrings(option, "leave"))
 	{
-		if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-		if (!GetPlayerChannel(playerid))				return SendErrorMessage(playerid, "You are not connected to any channel.");
+		if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
+		if (!GetPlayerChannel(playerid))				return SendErrorMessage(playerid, "Você não está conectado a nenhum canal.");
 
-		SendRadioMsg(playerid, "You have left the channel [CH: %i].", GetPlayerChannel(playerid));
+		SendRadioMsg(playerid, "Você saiu do canal [CH: %i].", GetPlayerChannel(playerid));
 		SetRadioChannel(playerid, 0);
 		PlaySound(playerid, 6400);
 		return 1;
@@ -69,18 +69,18 @@ CMD:channel(playerid, params[])
 		if (!IsPlayerInRangeOfPoint(playerid, 2.0, 2269.65, -74.306, 26.772))
 		{
 			Waypoint_Set(playerid, 2269.65, -74.306, 26.772);
-			SendWarningMessage(playerid, "You should be near the city library.");
+			SendWarningMessage(playerid, "Você deveria estar perto da biblioteca da cidade.");
 			return 1;
 		}
 
 		new channel, pass[33];
 
-		if (sscanf(secoption, "iS()[33]", channel, pass))	return SendHelpMessage(playerid, "(/ch)annel rent [channel (1-9999)] [password | leave blank if you do not want to set a password]");
-		if (strlen(pass) > 30)								return SendErrorMessage(playerid, "Password up to 30 characters.");
-		if (channel >= MAX_RADIOS || channel < 1)			return SendErrorMessage(playerid, "Channel 1 to %i.", MAX_RADIOS - 1);
-		if (PlayerInfo[playerid][pOwnedChannel])			return SendErrorMessage(playerid, "You already have a channel, first sell it.");
-		if (ChannelExists(channel))							return SendErrorMessage(playerid, "Radio channel reserved. ");
-		if (StringHasSymbols(pass))							return SendErrorMessage(playerid, "The password can only contain letters and numbers. ");
+		if (sscanf(secoption, "iS()[33]", channel, pass))	return SendHelpMessage(playerid, "(/canal) rent [canal (1-9999)] [senha | deixe em branco se não quiser definir uma senha]");
+		if (strlen(pass) > 30)								return SendErrorMessage(playerid, "Senha de até 30 caracteres.");
+		if (channel >= MAX_RADIOS || channel < 1)			return SendErrorMessage(playerid, "Canal 1 até", MAX_RADIOS - 1);
+		if (PlayerInfo[playerid][pOwnedChannel])			return SendErrorMessage(playerid, "Você já tem um canal, primeiro venda-o");
+		if (ChannelExists(channel))							return SendErrorMessage(playerid, "Canal de rádio reservado. ");
+		if (StringHasSymbols(pass))							return SendErrorMessage(playerid, "A senha só pode conter letras e números. ");
 		
 		new cost = 1500;
 
@@ -96,11 +96,11 @@ CMD:channel(playerid, params[])
 			break;
 		}
 
-		if (id == -1)	return SendErrorMessage(playerid, "All frequencies are busy, come back later.");
+		if (id == -1)	return SendErrorMessage(playerid, "Todas as frequências estão ocupadas, volte mais tarde.");
 
 		GiveCash(playerid, -cost);
-		SendRadioMsg(playerid, "You rented a channel [CH: %i] for $%i.", channel, cost);
-		SendHelpMessage(playerid, "Use /radiohelp for help.");
+		SendRadioMsg(playerid, "Você alugou um canal [CH: %i] por $%i.", channel, cost);
+		SendHelpMessage(playerid, "Use /radiohelp para verificar os comandos de ajuda.");
 		RadiosInfo[id][radioChannel] = channel;
 		RadiosInfo[id][radioOwner] = PlayerInfo[playerid][pID];
 		format(RadiosInfo[id][radioPass], 32, "%s", pass);
@@ -110,27 +110,27 @@ CMD:channel(playerid, params[])
 
 	else if (CompareStrings(option, "sell"))
 	{
-		if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "You are not renting a channel.");
+		if (!PlayerInfo[playerid][pOwnedChannel])	return SendErrorMessage(playerid, "Você não está alugando um canal.");
 		
 		new id = -1;
 
 		if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)
 		{
 			PlayerInfo[playerid][pOwnedChannel] = 0;
-			SendWarningMessage(playerid, "Channel not found.");
+			SendWarningMessage(playerid, "Canal não encontrado.");
 			return 1;
 		}
 
 		new award = 750;
 
 		GiveCash(playerid, award);
-		SendRadioMsg(playerid, "You sold a channel [CH: %i] for $%i.", RadiosInfo[id][radioChannel], award);
+		SendRadioMsg(playerid, "Você vendeu um canal [CH: %i] por $%i.", RadiosInfo[id][radioChannel], award);
 
 		foreach(new i : Player)
 		{
 			if (!IsPlayerLogged(i) || GetPlayerChannel(i) != RadiosInfo[id][radioChannel] || i == playerid) continue;
 
-			SendRadioMsg(i, "The channel you are connected to has been sold.");
+			SendRadioMsg(i, "O canal ao qual você está conectado foi vendido.");
 			SetRadioChannel(i, 0);
 		}
 
