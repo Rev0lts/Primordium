@@ -253,12 +253,12 @@ CMD:kickoffradio(playerid, params[])
 
     new id = -1;
 
-	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)	return SendErrorMessage(playerid, "Channel not found.");
-	if (RadiosInfo[id][radioChannel] != GetPlayerChannel(playerid))		return SendErrorMessage(playerid, "You must be in your channel [CH: %i].", RadiosInfo[id][radioChannel]);
-	if (GetPlayerChannel(userid) != GetPlayerChannel(playerid))			return SendErrorMessage(playerid, "This player is not in this channel. ");
+	if ((id = GetChannelID(PlayerInfo[playerid][pOwnedChannel])) == -1)	return SendErrorMessage(playerid, "Canal não encontrado.");
+	if (RadiosInfo[id][radioChannel] != GetPlayerChannel(playerid))		return SendErrorMessage(playerid, "Você deve estar em seu canal. [CH: %i].", RadiosInfo[id][radioChannel]);
+	if (GetPlayerChannel(userid) != GetPlayerChannel(playerid))			return SendErrorMessage(playerid, "Este jogador não está neste canal. ");
 
-	SendRadioMsg(playerid, "You kicked %s.", GetNameEx(id));
-	SendRadioMsg(userid, "You were kicked from the channel. ");
+	SendRadioMsg(playerid, "Você kickou %s.", GetNameEx(id));
+	SendRadioMsg(userid, "Você foi expulso do canal. ");
 	SetRadioChannel(userid, 0);
 	return 1;
 }
@@ -266,21 +266,21 @@ CMD:kickoffradio(playerid, params[])
 ALTX:r("/radio");
 CMD:r(playerid, params[])
 {
-    if (PlayerInfo[playerid][pMutedTime] > 0)		return SendErrorMessage(playerid,"Your local chat is blocked by the system.");
+    if (PlayerInfo[playerid][pMutedTime] > 0)		return SendErrorMessage(playerid,"Seu bate-papo local está bloqueado pelo sistema.");
 
     new channel = GetPlayerChannel(playerid);
 
-	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-	if (channel == 0)							return SendErrorMessage(playerid, "You are not on frequency.");
-	if (!PlayerInfo[playerid][pAuthed])			return SendErrorMessage(playerid, "You are not logged into the frequency.");
+	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
+	if (channel == 0)							return SendErrorMessage(playerid, "Você não está na frequência.");
+	if (!PlayerInfo[playerid][pAuthed])			return SendErrorMessage(playerid, "Você não está logado na frequência.");
 
 	if (channel == 911) {
 		new tag[6], arg[25];
 		if (!sscanf(params, "s[6]s[24]", tag, arg)) { 
 			if (CompareStrings(tag, "10-27")) {
 				new userid;
-				if (sscanf(arg, "u", userid)) return SendErrorMessage(playerid, "/r 10-27 [ID/Part Of Name]");
-				if (!IsPlayerLogged(userid))	 return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: No results found..");
+				if (sscanf(arg, "u", userid)) return SendErrorMessage(playerid, "/r 10-27 [ID/Part Do Nome]");
+				if (!IsPlayerLogged(userid))	 return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: Nenhum resultado encontrado..");
 
 				SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: %s, sex: %s, age: %i, unpaid fines: %s, search: %s.", GetNameEx(userid), (PlayerInfo[userid][pSex]==1)?("male"):("female"), GetAge(userid), (CountPlayerTickets(userid))?("{FF6347}%i{9189EF}"):("No"), (IsPlayerWanted(userid))?("Yes"):("No"));
 				SendLocalMessage(5.0, playerid, COLOR_FADE1,COLOR_FADE2,COLOR_FADE3,COLOR_FADE4,COLOR_FADE5, "(Radio) %s spune: Dispatcher, 10-27 %s.", GetNameWithMask(playerid), GetNameEx(userid));
@@ -288,7 +288,7 @@ CMD:r(playerid, params[])
 			} else if (CompareStrings(tag, "10-28")) {
 				new plates[10], vehicle;
 				if (sscanf(arg, "s[10]", plates))				 return SendErrorMessage(playerid, "/r 10-28 [plates]");
-				if ((vehicle = FindVehicleByPlate(plates)) == -1) return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: No results found..");
+				if ((vehicle = FindVehicleByPlate(plates)) == -1) return SendClientMessageEx(playerid, COLOR_POLICECHAT, "* HQ: Nenhum resultado encontrado..");
 				
 				PlayCrimeReportForPlayer(playerid, playerid, 13);
 				
@@ -299,7 +299,7 @@ CMD:r(playerid, params[])
 		}
 	}
 	
-	if (sscanf(params, "s[144]", params)) 		return SendHelpMessage(playerid, "/r [text]");
+	if (sscanf(params, "s[144]", params)) 		return SendHelpMessage(playerid, "/r [texto]");
 
 	new mes[128];
 
@@ -337,15 +337,15 @@ CMD:r(playerid, params[])
 
 CMD:rr(playerid, params[])
 {
-	if (isnull(params))							return SendHelpMessage(playerid, "/rr [text]");
-    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid, "Your local chat is blocked by the system.");
+	if (isnull(params))							return SendHelpMessage(playerid, "/rr [texto]");
+    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid, "Seu bate-papo local está bloqueado pelo sistema.");
 
     new channel = GetPlayerChannel(playerid),
 		slot = GetPlayerSlot(playerid);
 
-	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-	if (channel == 0)							return SendErrorRadioMessage(playerid, "You are not on frequency.");
-	if (PlayerInfo[playerid][pAuthed] == 0)		return SendErrorRadioMessage(playerid, "You are not logged into the frequency.");
+	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
+	if (channel == 0)							return SendErrorRadioMessage(playerid, "Você não está na frequência.");
+	if (PlayerInfo[playerid][pAuthed] == 0)		return SendErrorRadioMessage(playerid, "Você não está logado na frequência.");
 
 	new mes[128];
 	if (strlen(params) > MAXLEN)
@@ -380,14 +380,14 @@ CMD:rr(playerid, params[])
 ALTX:rlow("/rl","/rb");
 CMD:rlow(playerid, params[])
 {
-	if (isnull(params))							return SendHelpMessage(playerid, "/rlow [text]");
-    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid, "Your local chat is blocked by the system.");
+	if (isnull(params))							return SendHelpMessage(playerid, "/rlow [texto]");
+    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid, "Seu bate-papo local está bloqueado pelo sistema.");
 
     new channel = GetPlayerChannel(playerid);
 
-	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-	if (!channel)								return SendErrorMessage(playerid, "You are not on frequency.");
-	if (!PlayerInfo[playerid][pAuthed])			return SendErrorMessage(playerid, "You are not logged into the frequency.");
+	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
+	if (!channel)								return SendErrorMessage(playerid, "Você não está na frequência.");
+	if (!PlayerInfo[playerid][pAuthed])			return SendErrorMessage(playerid, "Você não está logado na frequência.");
 
 	new mes[128];
 
@@ -420,14 +420,14 @@ CMD:rlow(playerid, params[])
 ALTX:rrlow("/rrl","/rrb");
 CMD:rrlow(playerid, params[])
 {
-	if (isnull(params))							return SendHelpMessage(playerid, "/rrlow [text]");
-    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid,"Your local chat is blocked by the system.");
+	if (isnull(params))							return SendHelpMessage(playerid, "/rrlow [texto]");
+    if (PlayerInfo[playerid][pMutedTime] > 0)	return SendErrorMessage(playerid,"Seu bate-papo local está bloqueado pelo sistema.");
 
     new channel = GetPlayerChannel(playerid), slot = GetPlayerSlot(playerid);
 
-	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "You don't have a walkie-talkie.");
-	if (!channel)								return SendErrorRadioMessage(playerid, "You are not on frequency.");
-	if (!PlayerInfo[playerid][pAuthed])			return SendErrorRadioMessage(playerid, "You are not logged into the frequency.");
+	if (!IsPlayerHasItem(playerid, INV_RADIO))	return SendErrorMessage(playerid, "Você não tem um rádio.");
+	if (!channel)								return SendErrorRadioMessage(playerid, "Você não está na frequência.");
+	if (!PlayerInfo[playerid][pAuthed])			return SendErrorRadioMessage(playerid, "Você não está logado na frequência.");
 
 	new mes[128];
 
